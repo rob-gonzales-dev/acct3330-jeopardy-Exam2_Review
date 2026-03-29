@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCT 3330 Exam Review — Jeopardy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:   #0a0f2e;
+    --blue:   #1a237e;
+    --mid:    #283593;
+    --gold:   #ffd600;
+    --gold2:  #ffab00;
+    --white:  #ffffff;
+    --silver: #cfd8dc;
+    --green:  #00c853;
+    --red:    #ff1744;
+    --card-bg:#1c2461;
+    --hover:  #2a3580;
+    --used:   #0d1130;
+    --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    background: linear-gradient(135deg, #0d1339 0%, #1a237e 50%, #0d1339 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+  #header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(255,214,0,0.4);
+  }
+  #header p { font-size: 0.78rem; color: var(--silver); letter-spacing:1px; margin-top:2px; }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── SCOREBOARD ── */
+  #scoreboard {
+    display: flex; gap: 10px; padding: 14px 20px;
+    background: rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    overflow-x: auto;
+    flex-wrap: wrap;
+  }
+  .score-card {
+    background: var(--card-bg);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 8px 14px;
+    min-width: 110px;
+    text-align: center;
+    transition: all 0.3s;
+    flex: 1;
+  }
+  .score-card.leader { border-color: var(--gold); box-shadow: 0 0 14px rgba(255,214,0,0.3); }
+  .score-card .gname {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 1px;
+    color: var(--silver); text-transform: uppercase;
+  }
+  .score-card .gpts {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; color: var(--gold); line-height: 1;
+    transition: transform 0.2s;
+  }
+  .score-card.pop .gpts { transform: scale(1.3); }
+
+  /* ── BOARD ── */
+  #board-view { padding: 16px; }
+  #board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .cat-header {
+    background: var(--blue);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 12px 6px;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+    line-height: 1.2;
+  }
+  .cell {
+    background: var(--card-bg);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+    color: var(--gold);
+    text-shadow: 0 2px 8px rgba(255,214,0,0.3);
+    aspect-ratio: 1.4;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cell::before {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .cell:hover:not(.used) {
+    background: var(--hover);
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(255,214,0,0.2);
+  }
+  .cell.used {
+    background: var(--used);
+    color: transparent;
+    cursor: default;
+    border-color: rgba(255,255,255,0.03);
+  }
+  .cell.daily-double::after {
+    content:'★ DD';
+    position:absolute; bottom:4px; right:6px;
+    font-size:0.5rem; color:var(--gold2); font-family:'DM Mono',monospace;
+  }
+
+  /* ── QUESTION MODAL ── */
+  #q-overlay {
+    display:none; position:fixed; inset:0;
+    background: rgba(0,0,10,0.92);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  #q-overlay.show { display:flex; }
+  #q-box {
+    background: linear-gradient(160deg, #1a237e 0%, #0d1339 100%);
+    border: 3px solid var(--gold);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 0 60px rgba(255,214,0,0.15), var(--shadow);
+    animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity:0; }
+    to   { transform: scale(1);   opacity:1; }
+  }
+  #q-meta {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:16px;
+  }
+  #q-cat {
+    font-size:0.75rem; letter-spacing:3px; color:var(--gold2);
+    text-transform:uppercase; font-weight:700;
+  }
+  #q-pts {
+    font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:var(--gold);
+  }
+  #q-text {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: var(--white);
+  }
+  #q-choices { display:flex; flex-direction:column; gap:10px; margin-bottom:24px; }
+  .choice {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    cursor: default;
+    transition: all 0.3s;
+  }
+  .choice.correct { background: rgba(0,200,83,0.2); border-color: var(--green); color: var(--green); }
+  .choice.wrong   { background: rgba(255,23,68,0.15); border-color: var(--red); color: var(--red); }
+
+  #q-answer-reveal {
+    display:none;
+    background: rgba(0,200,83,0.1);
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: var(--green);
+  }
+  #q-answer-reveal.show { display:block; }
+  #q-answer-reveal strong { font-size:1.1rem; }
+
+  /* control buttons */
+  #q-controls { display:flex; gap:10px; flex-wrap:wrap; }
+  .btn {
+    border:none; border-radius:10px; padding:12px 20px;
+    font-family:'DM Sans',sans-serif; font-weight:700;
+    font-size:0.9rem; cursor:pointer; transition:all 0.2s;
+    letter-spacing:0.5px;
+  }
+  .btn-reveal { background: var(--gold); color: var(--navy); }
+  .btn-reveal:hover { background: var(--gold2); transform:translateY(-2px); }
+  .btn-correct { background: var(--green); color: var(--navy); }
+  .btn-correct:hover { filter:brightness(1.1); transform:translateY(-2px); }
+  .btn-wrong   { background: var(--red); color: var(--white); }
+  .btn-wrong:hover { filter:brightness(1.1); transform:translateY(-2px); }
+  .btn-skip    { background: rgba(255,255,255,0.1); color: var(--silver); }
+  .btn-skip:hover { background: rgba(255,255,255,0.2); }
+
+  /* group selector inside modal */
+  #group-selector { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .g-btn {
+    background: var(--card-bg);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size:0.8rem; font-weight:700;
+    cursor:pointer; color:var(--white);
+    transition:all 0.2s;
+    letter-spacing:0.5px;
+  }
+  .g-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .g-btn.selected { border-color: var(--gold); background: rgba(255,214,0,0.15); color: var(--gold); }
+
+  #group-selector-label {
+    font-size:0.75rem; color:var(--silver); margin-bottom:8px;
+    letter-spacing:1px; text-transform:uppercase;
+  }
+
+  /* ── PHONE VIEW ── */
+  #phone-view {
+    padding: 24px 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  #phone-waiting {
+    text-align:center; padding: 60px 20px;
+  }
+  #phone-waiting .pulse {
+    width:80px; height:80px; border-radius:50%;
+    background: var(--gold);
+    margin: 0 auto 20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,214,0,0.4); }
+    50%      { box-shadow: 0 0 0 20px rgba(255,214,0,0); }
+  }
+  #phone-q-text {
+    font-size:1.1rem; line-height:1.6; margin-bottom:20px;
+    background: var(--card-bg);
+    border-radius:14px; padding:20px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  #phone-choices { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+  .phone-choice {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size:0.95rem;
+  }
+  #phone-answer {
+    display:none;
+    background: rgba(0,200,83,0.15);
+    border: 2px solid var(--green);
+    border-radius:12px;
+    padding:16px;
+    color:var(--green);
+    text-align:center;
+    font-weight:700;
+  }
+  #phone-answer.show { display:block; }
+  #phone-scoreboard { margin-top:24px; }
+  #phone-scoreboard h3 {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:1.4rem; letter-spacing:2px; color:var(--gold);
+    margin-bottom:12px; text-align:center;
+  }
+  .phone-score-row {
+    display:flex; justify-content:space-between; align-items:center;
+    background: var(--card-bg); border-radius:10px;
+    padding:10px 16px; margin-bottom:8px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .phone-score-row.leader { border-color:var(--gold); }
+  .phone-score-row .rank { font-size:0.8rem; color:var(--silver); width:24px; }
+  .phone-score-row .pname { font-weight:600; flex:1; }
+  .phone-score-row .ppts { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--gold); }
+
+  /* ── SETUP SCREEN ── */
+  #setup-view {
+    max-width:600px; margin:0 auto; padding:40px 24px;
+  }
+  #setup-view h2 {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:2rem; letter-spacing:3px; color:var(--gold);
+    margin-bottom:8px;
+  }
+  #setup-view p { color:var(--silver); margin-bottom:24px; font-size:0.9rem; }
+  .setup-group {
+    background:var(--card-bg); border-radius:12px;
+    padding:14px 16px; margin-bottom:10px;
+    display:flex; align-items:center; gap:12px;
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .setup-group label { font-size:0.8rem; color:var(--silver); width:70px; letter-spacing:1px; }
+  .setup-group input {
+    flex:1; background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2); border-radius:8px;
+    padding:8px 12px; color:var(--white); font-size:0.95rem;
+    font-family:'DM Sans',sans-serif;
+  }
+  .setup-group input:focus { outline:none; border-color:var(--gold); }
+  .btn-start {
+    background: var(--gold); color:var(--navy);
+    border:none; border-radius:12px;
+    padding:16px 40px; font-size:1.1rem; font-weight:700;
+    cursor:pointer; margin-top:16px; width:100%;
+    font-family:'DM Sans',sans-serif; letter-spacing:1px;
+    transition:all 0.2s;
+  }
+  .btn-start:hover { background:var(--gold2); transform:translateY(-2px); }
+
+  /* ── QR INSTRUCTIONS ── */
+  #qr-section {
+    background: var(--card-bg);
+    border:2px dashed rgba(255,214,0,0.3);
+    border-radius:14px; padding:20px;
+    margin-top:20px; text-align:center;
+  }
+  #qr-section p { font-size:0.85rem; color:var(--silver); margin-bottom:8px; }
+  #qr-code { margin:12px auto; }
+  #phone-url {
+    font-family:'DM Mono',monospace;
+    font-size:0.75rem; color:var(--gold2);
+    word-break:break-all; margin-top:8px;
+  }
+
+  /* ── FINAL SCREEN ── */
+  #final-view { text-align:center; padding:60px 24px; }
+  #final-view h2 {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:3.5rem; letter-spacing:4px; color:var(--gold);
+    margin-bottom:8px;
+  }
+  .winner-banner {
+    background: linear-gradient(135deg, rgba(255,214,0,0.2), rgba(255,171,0,0.1));
+    border:2px solid var(--gold);
+    border-radius:16px; padding:20px 32px;
+    display:inline-block; margin:20px auto;
+    font-size:1.5rem; font-weight:700;
+  }
+  .final-scores {
+    display:flex; flex-direction:column; gap:8px;
+    max-width:400px; margin:20px auto;
+  }
+  .final-row {
+    display:flex; justify-content:space-between;
+    background:var(--card-bg); border-radius:10px;
+    padding:12px 20px; border:1px solid rgba(255,255,255,0.08);
+  }
+  .final-row.first { border-color:var(--gold); background:rgba(255,214,0,0.1); }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:700px) {
+    #board { grid-template-columns: repeat(3,1fr); }
+    .cat-header { font-size:0.65rem; padding:8px 4px; }
+    .cell { font-size:1.1rem; }
+  }
+  @media(max-width:440px) {
+    #board { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* confetti */
+  .confetti-piece {
+    position:fixed; width:10px; height:10px;
+    top:-10px; animation: fall linear forwards;
+    border-radius:2px; pointer-events:none; z-index:999;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity:0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div>
+    <h1>⚡ ACCT 3330 — Exam 2 Review</h1>
+    <p>AUDIT JEOPARDY · DR. GONZALES · SPRING 2026</p>
+  </div>
+  <div id="header-right"></div>
+</div>
+
+<!-- SCOREBOARD (always visible once game starts) -->
+<div id="scoreboard" style="display:none"></div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  VIEW 1: SETUP                                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="setup-view" class="view active">
+  <h2>Game Setup</h2>
+  <p>Enter the name for each of your 6 groups, then press Start.</p>
+  <div id="group-inputs"></div>
+  <button class="btn-start" onclick="startGame()">▶ Start Game</button>
+
+  <div id="qr-section">
+    <p>📱 Students scan this to follow along on their phones:</p>
+    <div id="qr-code"></div>
+    <div id="phone-url"></div>
+    <p style="margin-top:10px; font-size:0.75rem; color:#888">
+      (QR code links to this same page — students see the live board & scores)
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  VIEW 2: BOARD                                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="board-view" class="view">
+  <div id="board"></div>
+  <div style="text-align:center; margin-top:20px;">
+    <button class="btn btn-skip" onclick="showFinal()" style="padding:10px 28px;">
+      🏁 End Game & Show Results
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  VIEW 3: PHONE / STUDENT VIEW                        -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="phone-view" class="view">
+  <div id="phone-waiting">
+    <div class="pulse">📚</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:3px; color:var(--gold)">
+      ACCT 3330<br>EXAM REVIEW
+    </h2>
+    <p style="color:var(--silver); margin-top:8px;">Waiting for Dr. Gonzales to open a question…</p>
+  </div>
+  <div id="phone-active" style="display:none">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <span id="phone-cat" style="font-size:0.7rem; letter-spacing:2px; color:var(--gold2); text-transform:uppercase;"></span>
+      <span id="phone-pts" style="font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold);"></span>
+    </div>
+    <div id="phone-q-text"></div>
+    <div id="phone-choices"></div>
+    <div id="phone-answer"></div>
+  </div>
+  <div id="phone-scoreboard">
+    <h3>🏆 SCOREBOARD</h3>
+    <div id="phone-scores-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  VIEW 4: FINAL RESULTS                               -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="final-view" class="view">
+  <h2>🏆 Final Results</h2>
+  <div id="winner-display"></div>
+  <div class="final-scores" id="final-scores-list"></div>
+  <button class="btn btn-skip" onclick="location.reload()" style="margin-top:20px; padding:12px 32px;">
+    🔄 Play Again
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  QUESTION MODAL                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="q-overlay">
+  <div id="q-box">
+    <div id="q-meta">
+      <span id="q-cat"></span>
+      <span id="q-pts"></span>
+    </div>
+    <div id="q-text"></div>
+    <div id="q-choices"></div>
+    <div id="q-answer-reveal"></div>
+    <div id="group-selector-label">Award points to:</div>
+    <div id="group-selector"></div>
+    <div id="q-controls">
+      <button class="btn btn-reveal" id="btn-reveal" onclick="revealAnswer()">👁 Reveal Answer</button>
+      <button class="btn btn-correct" id="btn-correct" onclick="scorePoints(true)" style="display:none">✓ Correct (+pts)</button>
+      <button class="btn btn-wrong"   id="btn-wrong"   onclick="scorePoints(false)" style="display:none">✗ Wrong (−pts)</button>
+      <button class="btn btn-skip"    onclick="closeQuestion()">Skip / Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- QR Code library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  QUESTION BANK  (6 categories × 4 values)
+// ═══════════════════════════════════════════════════════════
+const CATEGORIES = [
+  "Ch.7\nEvidence",
+  "Ch.8\nPlanning",
+  "Ch.9\nRisk Model",
+  "Ch.10\nFraud",
+  "Ch.12\nIC & Control",
+  "Ch.13\nAudit Strategy"
+];
+
+// [stem, [A,B,C,D], correctIndex (0=A)]
+const QUESTIONS = {
+  "Ch.7\nEvidence": {
+    100: {
+      stem: "An auditor traces shipping documents to recorded sales invoices. This direction of testing most directly addresses which assertion?",
+      choices: ["A. Existence of recorded sales","B. Completeness — catching unrecorded sales","C. Valuation of accounts receivable","D. Classification of revenue"],
+      correct: 1,
+      explain: "B. Starting from the source document (shipping) and tracing forward tests whether all shipments were recorded — that is Completeness."
+    },
+    200: {
+      stem: "Fairfield's auditor obtains a large volume of internal sales reports but minimal external confirmations. Which characteristic of audit evidence is most directly impaired?",
+      choices: ["A. Sufficiency — not enough evidence","B. Reliability — evidence is not independently produced","C. Relevance — internal docs don't relate to the objective","D. Timeliness — evidence wasn't gathered at year-end"],
+      correct: 1,
+      explain: "B. Appropriateness has two parts: relevance and reliability. Internal documents score low on reliability because they are created and controlled by the client."
+    },
+    300: {
+      stem: "Audit Data Analytics (ADA) flags 47 invoices dated December 31 with shipping dates in January. Management says it's normal year-end volume. What is the auditor's BEST next step?",
+      choices: ["A. Accept — inquiry is valid audit evidence","B. Develop an expectation, then inspect shipping docs and contracts for a sample","C. Expand ADA to the full year and stop there","D. Issue a scope limitation immediately"],
+      correct: 1,
+      explain: "B. The ADA step is 'Investigating Anomalies' — the auditor must first develop an expectation and then test the exceptions with corroborating evidence."
+    },
+    400: {
+      stem: "An associate documents: 'Reviewed year-end revenue for cutoff issues.' Which documentation standard is violated?",
+      choices: ["A. Must be cross-referenced to permanent file","B. Must describe procedures, evidence examined, and conclusions reached","C. Must be prepared by a senior auditor, not an associate","D. It is adequate — it names the account and period"],
+      correct: 1,
+      explain: "B. AU-C §230 requires sufficient detail for another experienced auditor to understand what was done, what was found, and the conclusion reached."
+    }
+  },
+  "Ch.8\nPlanning": {
+    100: {
+      stem: "Before accepting a new client, the successor auditor asks to contact the predecessor. Management refuses. The auditor's BEST response is to:",
+      choices: ["A. Proceed — predecessor communication is optional","B. Limit engagement to a review","C. Seriously consider whether to accept — refusal raises integrity concerns","D. Accept but disclose the gap in the report"],
+      correct: 2,
+      explain: "C. AU-C §210 requires the successor to request permission. Refusal is itself a red flag about management integrity and may be grounds to decline the engagement."
+    },
+    200: {
+      stem: "Performance materiality is set lower than overall materiality primarily to:",
+      choices: ["A. Allow auditors to waive immaterial errors","B. Reduce the likelihood that combined uncorrected misstatements exceed overall materiality","C. Ensure every account gets equal testing","D. Satisfy audit committee disclosure requirements"],
+      correct: 1,
+      explain: "B. Performance materiality creates a buffer — even if individual uncorrected items are each below overall materiality, their aggregate should not exceed it."
+    },
+    300: {
+      stem: "Fairfield's DSO rose from 45 to 48 days while bad debt expense declined. Considered TOGETHER, the auditor is most concerned about:",
+      choices: ["A. Revenue completeness — some sales weren't recorded","B. The allowance for doubtful accounts may be understated","C. Inventory turnover decline","D. Operating leverage inflating net income"],
+      correct: 1,
+      explain: "B. Longer collection times + lower bad debt expense is contradictory. The allowance may be underestimated, understating expenses and overstating net assets."
+    },
+    400: {
+      stem: "Three misstatements are found: $80K in AR, $350K in inventory, $120K in accrued liabilities. Overall materiality is $500K. What concept requires reconsidering the $80K?",
+      choices: ["A. Tolerable misstatement per account","B. Aggregation — combined misstatements may exceed overall materiality","C. Inherent risk for accounts receivable","D. Performance materiality applies only to TOC"],
+      correct: 1,
+      explain: "B. Individually immaterial items must be aggregated. $80K + $350K + $120K = $550K — which exceeds overall materiality of $500K."
+    }
+  },
+  "Ch.9\nRisk Model": {
+    100: {
+      stem: "The audit risk model is expressed as AR = IR × CR × DR. If IR and CR are both HIGH and acceptable audit risk is LOW, planned detection risk should be:",
+      choices: ["A. High — IR and CR already cover the risk","B. Low — more evidence is needed to compensate","C. Moderate — AAR is the dominant factor","D. Irrelevant when CR is at maximum"],
+      correct: 1,
+      explain: "B. PDR = AAR ÷ (IR × CR). Low AAR divided by high IR × CR = very low PDR, meaning the auditor must gather highly persuasive evidence."
+    },
+    200: {
+      stem: "Fairfield's auditor confirms payroll controls are well-designed and operating effectively (low CR). The BEST adjustment to the audit plan is to:",
+      choices: ["A. Increase TDB to verify the TOC conclusions","B. Accept higher PDR and reduce substantive payroll testing","C. Eliminate all substantive testing for payroll","D. Increase AAR since strong controls reduce engagement risk"],
+      correct: 1,
+      explain: "B. When CR is low, the auditor can accept higher detection risk, which means less extensive substantive testing is required."
+    },
+    300: {
+      stem: "Fairfield is a large publicly traded company with millions of external investors. Compared to a small private client, the auditor sets acceptable audit risk:",
+      choices: ["A. Higher — larger companies have better internal resources","B. Lower — consequences of an incorrect opinion are far greater","C. The same — standards require consistency across all clients","D. Higher — public companies face more regulatory oversight"],
+      correct: 1,
+      explain: "B. AAR reflects how much assurance financial statement users require. Public company users are more numerous and reliant — so the auditor must accept less risk of being wrong."
+    },
+    400: {
+      stem: "In Year 3 Fairfield's Times Interest Earned was exactly 1.0 — barely covering its loan covenant. In Year 4 it jumped to 9.23. How does this historical context affect Year 4 planning?",
+      choices: ["A. Year 4 improvement eliminates the risk; reduce testing","B. Year 3 covenant pressure is an incentive condition; increase skepticism over operating income","C. Covenant was met in Year 3 — no planning adjustment needed","D. Communicate to the SEC regardless of Year 4 results"],
+      correct: 1,
+      explain: "B. A near-miss on a covenant in Year 3 is a fraud triangle pressure condition. Management had strong incentive to ensure Year 4 results looked strong — warranting more skepticism."
+    }
+  },
+  "Ch.10\nFraud": {
+    100: {
+      stem: "Fairfield's sales manager approves credit limits, records sales, AND processes write-offs with no compensating control. Under the fraud triangle, this MOST directly illustrates:",
+      choices: ["A. Incentive — pressure to meet targets","B. Opportunity — lack of segregation enables fraud","C. Rationalization — manager can justify the override","D. Collusion — requires two people by definition"],
+      correct: 1,
+      explain: "B. Lack of segregation of duties = Opportunity. One person controlling an entire cycle can commit AND conceal fraud."
+    },
+    200: {
+      stem: "Management's bonus is tied to hitting a 15% profit margin. The company has never exceeded 8%. Year-end results show exactly 15.02%. This MOST directly represents which fraud condition?",
+      choices: ["A. Opportunity from weak controls","B. Rationalization for minor adjustments","C. Incentive/Pressure to manipulate reported results","D. Detection risk not yet addressed"],
+      correct: 2,
+      explain: "C. A compensation structure directly tied to hitting a specific number — especially one never previously achieved — is a classic incentive/pressure condition."
+    },
+    300: {
+      stem: "Fairfield's internal audit confirms all sales are properly authorized. But the external auditor learns the sales manager and credit manager coordinated to approve fictitious customers. Which internal control limitation does this illustrate?",
+      choices: ["A. Human error — inadequate training","B. Management override of controls","C. Collusion between employees","D. Control environment deficiency"],
+      correct: 2,
+      explain: "C. Collusion is an inherent limitation — two or more people working together can circumvent controls designed for individual actors."
+    },
+    400: {
+      stem: "Vertical analysis shows gross profit % jumped from 17.9% to 27.85% in one year. Cost of sales grew only 6.3% while net sales grew 21%. What does this pattern MOST suggest to a skeptical auditor?",
+      choices: ["A. Efficient operations — accept management's explanation","B. Revenue may be overstated OR cost of sales understated — expand testing","C. The NovaStar acquisition fully explains the jump — no action needed","D. Reduce testing because higher margins indicate lower risk"],
+      correct: 1,
+      explain: "B. When margins spike in a way inconsistent with operations, the auditor must investigate whether revenue was inflated or costs were deferred/capitalized improperly."
+    }
+  },
+  "Ch.12\nIC & Control": {
+    100: {
+      stem: "A single AP employee both approves invoices AND processes payments. There is more than a reasonable possibility that a material misstatement would go undetected. This is classified as a:",
+      choices: ["A. Control deficiency","B. Significant deficiency","C. Material weakness","D. Inherent limitation"],
+      correct: 2,
+      explain: "C. A material weakness exists when there is more than a reasonable possibility that a material misstatement won't be prevented or detected on a timely basis."
+    },
+    200: {
+      stem: "Under PCAOB AS 2201, when auditing ICFR, the auditor uses a top-down approach. What is the FIRST step?",
+      choices: ["A. Test individual transaction controls for high-dollar accounts","B. Evaluate entity-level controls and tone at the top","C. Identify significant accounts most susceptible to misstatement","D. Assess IT general controls for the financial systems"],
+      correct: 1,
+      explain: "B. The top-down approach starts at the top — entity-level controls, tone at the top, control environment — before drilling into specific accounts or IT systems."
+    },
+    300: {
+      stem: "Management reclassified $1,000,000 of software development labor from SG&A to PP&E with no technological feasibility documentation. Which assertion for PP&E is MOST at risk?",
+      choices: ["A. Existence — assets may not physically exist","B. Completeness — not all PP&E has been recorded","C. Valuation — the amount may not qualify for capitalization under GAAP","D. Rights and obligations — Fairfield may not own the software"],
+      correct: 2,
+      explain: "C. Without documentation of the feasibility milestone, the capitalization may not meet GAAP criteria — meaning PP&E is overstated and expenses are understated. This is a valuation issue."
+    },
+    400: {
+      stem: "Fairfield is a private (nonissuer) company. The auditor identifies a material weakness in ICFR. What is the auditor's required action?",
+      choices: ["A. Issue an adverse opinion on the financial statements","B. Communicate the material weakness in writing to management and those charged with governance","C. Include a separate ICFR opinion paragraph in the audit report","D. Withdraw from the engagement"],
+      correct: 1,
+      explain: "B. For nonissuers, there is no requirement for a separate ICFR opinion. However, auditors must communicate material weaknesses in writing to management and those charged with governance."
+    }
+  },
+  "Ch.13\nAudit Strategy": {
+    100: {
+      stem: "An auditor finds a cash disbursement of $45,000 processed without the required dual-approval signature. What does this finding represent?",
+      choices: ["A. A financial statement misstatement requiring a journal entry","B. A control deviation suggesting the likelihood of a dollar misstatement — but not itself a misstatement","C. An immaterial error below performance materiality","D. Grounds to immediately issue a material weakness opinion"],
+      correct: 1,
+      explain: "B. A TOC exception = control deviation. It indicates the control did not operate as designed. A dollar misstatement may or may not exist — the auditor must follow up with substantive testing."
+    },
+    200: {
+      stem: "Substantive analytical procedures are the LEAST expensive of the five test types. When are they MOST effective?",
+      choices: ["A. Comparing total annual revenue Year 4 vs. Year 3","B. Comparing monthly revenue by product line and region against budget and prior-year actuals","C. Reviewing prior-year workpapers for revenue exceptions","D. Inquiring of management about fluctuations found during planning"],
+      correct: 1,
+      explain: "B. SAPs are most effective at a granular level — monthly, by region, by product line. Annual company-wide comparisons are too broad to detect specific misstatements."
+    },
+    300: {
+      stem: "Fairfield has WEAK internal controls over revenue and HIGH inherent risk for occurrence and cutoff. TOC confirms controls are not effective. Which evidence mix is most appropriate?",
+      choices: ["A. Extensive TOC; limited TDB since understanding the weakness is enough","B. No TOC (controls are weak); extensive STOT and TDB","C. Balanced equal reliance on all five test types","D. Primarily analytical procedures — least expensive option"],
+      correct: 1,
+      explain: "B. Per Table 13-3: weak IC + high inherent risk → No TOC reliance; extensive substantive tests of transactions and tests of details of balances."
+    },
+    400: {
+      stem: "Fairfield's Year 4 shows: profit margin 2× industry average, DSO up + bad debt down, unsupported expense reversals, $1M capitalized without documentation, and material cutoff exceptions. Viewed together this pattern MOST suggests:",
+      choices: ["A. Isolated errors — correct each and issue unmodified opinion","B. A pervasive pattern consistent with fraudulent financial reporting — expand all testing and reassess fraud risk","C. Primarily a NovaStar acquisition classification issue — focus on goodwill","D. A going concern situation — add emphasis-of-matter paragraph"],
+      correct: 1,
+      explain: "B. Multiple simultaneous indicators — margin anomaly, revenue timing exceptions, unsupported reversals — form a pervasive pattern. This triggers AU-C §240 fraud risk reassessment at the financial statement level."
+    }
+  }
+};
+
+const POINT_VALUES = [100, 200, 300, 400];
+
+// Daily doubles: [catIndex, ptIndex]
+const DAILY_DOUBLES = [[2, 2], [4, 3]]; // Ch.9 $300 and Ch.12 $400
+
+// ═══════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════
+let groups = [];
+let scores = {};
+let usedCells = {};
+let currentQ = null;
+let currentCat = null;
+let currentPts = 0;
+let selectedGroup = null;
+let isPhoneView = false;
+let answerRevealed = false;
+
+// Shared state via localStorage
+function saveState() {
+  localStorage.setItem('jeopardy_state', JSON.stringify({
+    groups, scores, usedCells,
+    currentQ, currentCat, currentPts,
+    answerRevealed
+  }));
+}
+
+function loadState() {
+  const s = localStorage.getItem('jeopardy_state');
+  if (!s) return false;
+  const d = JSON.parse(s);
+  groups = d.groups;
+  scores = d.scores;
+  usedCells = d.usedCells;
+  currentQ = d.currentQ;
+  currentCat = d.currentCat;
+  currentPts = d.currentPts;
+  answerRevealed = d.answerRevealed;
+  return true;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SETUP
+// ═══════════════════════════════════════════════════════════
+function initSetup() {
+  const container = document.getElementById('group-inputs');
+  const defaults = ['Group 1','Group 2','Group 3','Group 4','Group 5','Group 6'];
+  for (let i = 0; i < 6; i++) {
+    container.innerHTML += `
+      <div class="setup-group">
+        <label>Group ${i+1}</label>
+        <input type="text" id="gname${i}" value="${defaults[i]}" placeholder="Group ${i+1} name">
+      </div>`;
+  }
+
+  // QR code
+  const url = window.location.href;
+  try {
+    new QRCode(document.getElementById('qr-code'), {
+      text: url, width:120, height:120,
+      colorDark:'#ffd600', colorLight:'#0a0f2e'
+    });
+  } catch(e) {}
+  document.getElementById('phone-url').textContent = url;
+}
+
+function startGame() {
+  groups = [];
+  scores = {};
+  for (let i = 0; i < 6; i++) {
+    const name = document.getElementById(`gname${i}`).value.trim() || `Group ${i+1}`;
+    groups.push(name);
+    scores[name] = 0;
+  }
+  usedCells = {};
+  saveState();
+  showView('board-view');
+  renderScoreboard();
+  renderBoard();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  VIEWS
+// ═══════════════════════════════════════════════════════════
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('scoreboard').style.display =
+    (id === 'board-view' || id === 'final-view') ? 'flex' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SCOREBOARD
+// ═══════════════════════════════════════════════════════════
+function renderScoreboard() {
+  const sb = document.getElementById('scoreboard');
+  const max = Math.max(...Object.values(scores));
+  sb.innerHTML = groups.map(g => `
+    <div class="score-card ${scores[g]===max && max>0 ? 'leader' : ''}" id="sc-${g.replace(/\s/g,'_')}">
+      <div class="gname">${g}</div>
+      <div class="gpts">${scores[g]}</div>
+    </div>`).join('');
+}
+
+function animateScore(groupName) {
+  const id = 'sc-' + groupName.replace(/\s/g,'_');
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('pop');
+  setTimeout(() => el.classList.remove('pop'), 300);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BOARD
+// ═══════════════════════════════════════════════════════════
+function renderBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+
+  // Category headers
+  CATEGORIES.forEach(cat => {
+    const h = document.createElement('div');
+    h.className = 'cat-header';
+    h.textContent = cat;
+    board.appendChild(h);
+  });
+
+  // Cells
+  POINT_VALUES.forEach((pts, pi) => {
+    CATEGORIES.forEach((cat, ci) => {
+      const key = `${ci}-${pi}`;
+      const cell = document.createElement('div');
+      cell.className = 'cell' + (usedCells[key] ? ' used' : '');
+
+      const isDD = DAILY_DOUBLES.some(([c,p]) => c===ci && p===pi);
+      if (isDD) cell.classList.add('daily-double');
+
+      if (!usedCells[key]) {
+        cell.textContent = pts;
+        cell.onclick = () => openQuestion(cat, pts, ci, pi);
+      }
+      board.appendChild(cell);
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  QUESTION MODAL
+// ═══════════════════════════════════════════════════════════
+function openQuestion(cat, pts, ci, pi) {
+  const q = QUESTIONS[cat][pts];
+  currentQ = q;
+  currentCat = cat;
+  currentPts = pts;
+  currentKey = `${ci}-${pi}`;
+  selectedGroup = null;
+  answerRevealed = false;
+
+  const isDD = DAILY_DOUBLES.some(([c,p]) => c===ci && p===pi);
+
+  document.getElementById('q-cat').textContent = cat.replace('\n',' — ') + (isDD ? '  ⭐ DAILY DOUBLE' : '');
+  document.getElementById('q-pts').textContent = isDD ? '★ DD' : `$${pts}`;
+  document.getElementById('q-text').textContent = q.stem;
+
+  const choicesDiv = document.getElementById('q-choices');
+  choicesDiv.innerHTML = q.choices.map((c,i) =>
+    `<div class="choice" id="choice-${i}">${c}</div>`).join('');
+
+  document.getElementById('q-answer-reveal').classList.remove('show');
+  document.getElementById('q-answer-reveal').innerHTML = '';
+  document.getElementById('btn-reveal').style.display = 'inline-block';
+  document.getElementById('btn-correct').style.display = 'none';
+  document.getElementById('btn-wrong').style.display = 'none';
+
+  // Group selector
+  const gs = document.getElementById('group-selector');
+  gs.innerHTML = groups.map(g =>
+    `<button class="g-btn" onclick="selectGroup('${g}')">${g}</button>`).join('');
+
+  document.getElementById('q-overlay').classList.add('show');
+  saveState();
+  renderPhoneQuestion();
+}
+
+function selectGroup(name) {
+  selectedGroup = name;
+  document.querySelectorAll('.g-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+}
+
+function revealAnswer() {
+  const q = currentQ;
+  answerRevealed = true;
+
+  q.choices.forEach((c, i) => {
+    const el = document.getElementById(`choice-${i}`);
+    if (i === q.correct) el.classList.add('correct');
+  });
+
+  const reveal = document.getElementById('q-answer-reveal');
+  reveal.innerHTML = `<strong>✓ Answer: ${q.choices[q.correct]}</strong><br><br>${q.explain}`;
+  reveal.classList.add('show');
+
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-correct').style.display = 'inline-block';
+  document.getElementById('btn-wrong').style.display = 'inline-block';
+
+  saveState();
+  renderPhoneQuestion();
+}
+
+function scorePoints(correct) {
+  if (!selectedGroup) {
+    alert('Select a group first!');
+    return;
+  }
+  const delta = correct ? currentPts : -Math.floor(currentPts / 2);
+  scores[selectedGroup] = (scores[selectedGroup] || 0) + delta;
+  if (scores[selectedGroup] < 0) scores[selectedGroup] = 0;
+
+  // Mark cell used
+  usedCells[currentKey] = true;
+
+  closeQuestion();
+  renderScoreboard();
+  renderBoard();
+  animateScore(selectedGroup);
+  if (correct) spawnConfetti();
+  saveState();
+}
+
+function closeQuestion() {
+  document.getElementById('q-overlay').classList.remove('show');
+  usedCells[currentKey] = true;
+  currentQ = null;
+  renderBoard();
+  renderPhoneQuestion();
+  saveState();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PHONE VIEW
+// ═══════════════════════════════════════════════════════════
+function renderPhoneQuestion() {
+  if (!isPhoneView) return;
+
+  renderPhoneScores();
+
+  if (!currentQ) {
+    document.getElementById('phone-waiting').style.display = 'block';
+    document.getElementById('phone-active').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('phone-waiting').style.display = 'none';
+  document.getElementById('phone-active').style.display = 'block';
+
+  document.getElementById('phone-cat').textContent = currentCat.replace('\n',' — ');
+  document.getElementById('phone-pts').textContent = `$${currentPts}`;
+  document.getElementById('phone-q-text').textContent = currentQ.stem;
+
+  const pc = document.getElementById('phone-choices');
+  pc.innerHTML = currentQ.choices.map((c, i) => {
+    let cls = 'phone-choice';
+    if (answerRevealed && i === currentQ.correct) cls += '" style="border-color:var(--green);color:var(--green)';
+    return `<div class="${cls}">${c}</div>`;
+  }).join('');
+
+  const pa = document.getElementById('phone-answer');
+  if (answerRevealed) {
+    pa.innerHTML = `✓ ${currentQ.choices[currentQ.correct]}<br><small style="font-weight:400;font-size:0.8rem;color:#aaa">${currentQ.explain}</small>`;
+    pa.classList.add('show');
+  } else {
+    pa.classList.remove('show');
+  }
+}
+
+function renderPhoneScores() {
+  const sorted = groups.slice().sort((a,b) => scores[b]-scores[a]);
+  const max = scores[sorted[0]] || 0;
+  document.getElementById('phone-scores-list').innerHTML = sorted.map((g,i) => `
+    <div class="phone-score-row ${scores[g]===max && max>0 ? 'leader':'' }">
+      <span class="rank">${i+1}.</span>
+      <span class="pname">${g}</span>
+      <span class="ppts">${scores[g]}</span>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  FINAL
+// ═══════════════════════════════════════════════════════════
+function showFinal() {
+  showView('final-view');
+  const sorted = groups.slice().sort((a,b) => scores[b]-scores[a]);
+  document.getElementById('winner-display').innerHTML =
+    `<div class="winner-banner">🥇 ${sorted[0]} — ${scores[sorted[0]]} pts</div>`;
+  document.getElementById('final-scores-list').innerHTML = sorted.map((g,i) =>
+    `<div class="final-row ${i===0?'first':''}">
+      <span>${['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣'][i]} ${g}</span>
+      <strong>${scores[g]} pts</strong>
+    </div>`).join('');
+  spawnConfetti(80);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CONFETTI
+// ═══════════════════════════════════════════════════════════
+function spawnConfetti(n = 30) {
+  const colors = ['#ffd600','#ffab00','#00c853','#2979ff','#ff1744','#e040fb'];
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.cssText = `
+        left:${Math.random()*100}vw;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-duration:${1.5+Math.random()*2}s;
+        animation-delay:${Math.random()*0.5}s;
+        transform:rotate(${Math.random()*360}deg);
+        width:${6+Math.random()*8}px;
+        height:${6+Math.random()*8}px;
+      `;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+    }, i * 30);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  POLLING (phone stays in sync)
+// ═══════════════════════════════════════════════════════════
+function pollState() {
+  if (!isPhoneView) return;
+  const prev = JSON.stringify({currentQ, answerRevealed, scores});
+  loadState();
+  renderPhoneQuestion();
+  renderPhoneScores();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+window.onload = function() {
+  const params = new URLSearchParams(window.location.search);
+  isPhoneView = params.get('mode') === 'student';
+
+  if (isPhoneView) {
+    document.getElementById('header-right').innerHTML =
+      `<span style="font-size:0.75rem;color:var(--silver)">📱 STUDENT VIEW</span>`;
+    if (loadState() && groups.length > 0) {
+      showView('phone-view');
+      renderPhoneQuestion();
+      renderPhoneScores();
+    } else {
+      showView('phone-view');
+      document.getElementById('phone-waiting').innerHTML = `
+        <div class="pulse">📱</div>
+        <h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold)">WAITING FOR GAME</h2>
+        <p style="color:var(--silver);margin-top:8px;">Dr. Gonzales hasn't started yet. Stay tuned!</p>`;
+    }
+    setInterval(pollState, 1500);
+    return;
+  }
+
+  // Instructor view
+  document.getElementById('header-right').innerHTML =
+    `<span style="font-size:0.75rem;color:var(--silver)">🖥 INSTRUCTOR VIEW</span>`;
+
+  if (loadState() && groups.length > 0) {
+    // Resume existing game
+    if (confirm('Resume previous game?')) {
+      showView('board-view');
+      renderScoreboard();
+      renderBoard();
+      document.getElementById('scoreboard').style.display = 'flex';
+      return;
+    } else {
+      localStorage.removeItem('jeopardy_state');
+    }
+  }
+
+  initSetup();
+
+  // Generate student QR link
+  const studentUrl = window.location.href.split('?')[0] + '?mode=student';
+  try {
+    document.getElementById('qr-code').innerHTML = '';
+    new QRCode(document.getElementById('qr-code'), {
+      text: studentUrl, width:130, height:130,
+      colorDark:'#ffd600', colorLight:'#0a0f2e'
+    });
+  } catch(e){}
+  document.getElementById('phone-url').textContent = studentUrl;
+};
+</script>
+</body>
+</html>
