@@ -406,284 +406,49 @@ const CATEGORIES = [
 ];
 
 const QUESTIONS = {
-  "Ch.7\nEvidence": {
-    100: {
-      stem: "An auditor traces shipping documents to recorded sales invoices. This direction of testing most directly addresses which assertion?",
-      choices: [
-        "A. Existence",
-        "B. Completeness",
-        "C. Valuation",
-        "D. Classification"
-      ],
-      correct: 1,
-      explain: "B. Completeness. Starting from the shipping document and tracing forward to the sales journal tests whether all shipments were recorded — that is Completeness."
-    },
-    200: {
-      stem: "Fairfield's auditor obtains a large volume of internal sales reports but minimal external confirmations. Which characteristic of audit evidence is most directly impaired?",
-      choices: [
-        "A. Sufficiency",
-        "B. Relevance",
-        "C. Reliability",
-        "D. Timeliness"
-      ],
-      correct: 2,
-      explain: "C. Reliability. Internal documents are created and controlled by the client, which reduces their reliability as audit evidence compared to independently obtained evidence."
-    },
-    300: {
-      stem: "Audit Data Analytics flags 47 invoices dated December 31 with shipping dates in January. Management says it is normal year-end volume. What is the auditor's most appropriate next step?",
-      choices: [
-        "A. Accept management's explanation since inquiry is a valid form of evidence.",
-        "B. Develop an independent expectation and inspect a sample of shipping documents and contracts.",
-        "C. Expand the ADA scan to the full year and conclude based on those results.",
-        "D. Issue a scope limitation since the pattern cannot be explained."
-      ],
-      correct: 1,
-      explain: "B. The ADA step of Investigating Anomalies requires the auditor to first develop an expectation, then corroborate or refute it with additional evidence such as shipping documents and customer contracts."
-    },
-    400: {
-      stem: "An audit associate documents the following: 'Reviewed year-end revenue for cutoff issues.' Which documentation requirement is most clearly violated?",
-      choices: [
-        "A. The working paper must be cross-referenced to the permanent file.",
-        "B. The documentation must describe the procedures performed, evidence examined, and conclusions reached.",
-        "C. Working papers must be prepared by a senior auditor or above.",
-        "D. The documentation is sufficient because it identifies the account and period."
-      ],
-      correct: 1,
-      explain: "B. AU-C §230 requires that documentation be sufficient for an experienced auditor to understand what was done, what evidence was obtained, and what conclusions were reached. This entry provides none of that."
-    }
-  },
-  "Ch.8\nPlanning": {
-    100: {
-      stem: "Before accepting a new engagement, the successor auditor requests permission to contact the predecessor auditor. Management refuses. What is the most appropriate response?",
-      choices: [
-        "A. Proceed with the engagement and perform additional procedures to compensate.",
-        "B. Limit the engagement to a review instead of an audit.",
-        "C. Seriously consider whether to accept the engagement.",
-        "D. Accept the engagement but disclose the limitation in the audit report."
-      ],
-      correct: 2,
-      explain: "C. Management's refusal to allow predecessor communication is a red flag about management integrity. The successor auditor should seriously consider whether to accept the engagement at all."
-    },
-    200: {
-      stem: "Performance materiality is set at a level lower than overall materiality. What is the primary purpose of this lower threshold?",
-      choices: [
-        "A. To allow auditors to waive corrections for amounts below overall materiality.",
-        "B. To reduce the likelihood that the combined total of uncorrected misstatements exceeds overall materiality.",
-        "C. To ensure that every account balance receives the same level of testing.",
-        "D. To satisfy audit committee disclosure requirements under PCAOB standards."
-      ],
-      correct: 1,
-      explain: "B. Performance materiality creates a buffer so that even if multiple individually immaterial misstatements go uncorrected, their combined total is unlikely to exceed overall materiality."
-    },
-    300: {
-      stem: "Fairfield's days sales outstanding increased from 45 to 48 days while bad debt expense declined in the same year. Considered together, the auditor is most concerned about which of the following?",
-      choices: [
-        "A. Revenue may not have been completely recorded.",
-        "B. The allowance for doubtful accounts may be understated.",
-        "C. Inventory turnover has declined, suggesting obsolete stock.",
-        "D. Operating leverage is artificially inflating net income."
-      ],
-      correct: 1,
-      explain: "B. Longer collection periods combined with lower bad debt expense is contradictory. It suggests the allowance for doubtful accounts is too low, understating bad debt expense and overstating net assets."
-    },
-    400: {
-      stem: "An auditor identifies misstatements of $80K in AR, $350K in inventory, and $120K in accrued liabilities. Overall materiality is $500K. Each item was individually judged immaterial. Which concept now requires the auditor to reconsider that conclusion?",
-      choices: [
-        "A. Tolerable misstatement set at the individual account level.",
-        "B. The aggregation of individually immaterial misstatements.",
-        "C. The inherent risk associated with the accounts receivable balance.",
-        "D. Performance materiality applies only to tests of controls."
-      ],
-      correct: 1,
-      explain: "B. Individually immaterial items must be evaluated in aggregate. $80K + $350K + $120K = $550K, which exceeds overall materiality of $500K."
-    }
-  },
-  "Ch.9\nRisk Model": {
-    100: {
-      stem: "The audit risk model is AR = IR × CR × DR. Inherent risk and control risk are both assessed as high, and acceptable audit risk is set at low. What is the appropriate level of planned detection risk?",
-      choices: [
-        "A. High, because inherent and control risk already account for most of the engagement risk.",
-        "B. Low, because the auditor must gather more persuasive evidence to compensate.",
-        "C. Moderate, because acceptable audit risk is always the dominant factor in the model.",
-        "D. Detection risk is irrelevant when control risk is assessed at maximum."
-      ],
-      correct: 1,
-      explain: "B. PDR = AAR ÷ (IR × CR). When AAR is low and IR × CR is high, planned detection risk must be very low, requiring more extensive and persuasive audit evidence."
-    },
-    200: {
-      stem: "Fairfield's auditor confirms through tests of controls that payroll controls are well-designed and operating effectively. What is the most appropriate adjustment to the audit plan?",
-      choices: [
-        "A. Increase tests of details of balances to independently verify the TOC results.",
-        "B. Accept a higher planned detection risk and reduce the extent of substantive payroll testing.",
-        "C. Eliminate all substantive testing for payroll since controls have been confirmed.",
-        "D. Increase acceptable audit risk since strong controls reduce overall engagement risk."
-      ],
-      correct: 1,
-      explain: "B. When control risk is low, the auditor can accept a higher planned detection risk, which translates to less extensive substantive testing for that cycle."
-    },
-    300: {
-      stem: "Fairfield Computers is a large publicly traded company with extensive external investor and creditor reliance on its financial statements. Compared to a small private client, how should the auditor set acceptable audit risk?",
-      choices: [
-        "A. Higher, because larger companies have greater resources to maintain accurate records.",
-        "B. Lower, because the consequences of issuing an incorrect opinion are significantly greater.",
-        "C. The same, because auditing standards require consistent application across all engagements.",
-        "D. Higher, because public companies are subject to additional regulatory oversight."
-      ],
-      correct: 1,
-      explain: "B. Acceptable audit risk reflects the level of assurance required by financial statement users. With more users relying on the statements, the auditor must accept less risk of being wrong."
-    },
-    400: {
-      stem: "In Year 3, Fairfield's Times Interest Earned ratio was exactly 1.0, barely satisfying a loan covenant. In Year 4 it increased to 9.23. How does this historical context most directly affect Year 4 audit planning?",
-      choices: [
-        "A. The Year 4 improvement eliminates the prior risk factor and supports a reduction in testing.",
-        "B. The Year 3 near-breach represents an incentive condition that warrants increased skepticism over Year 4 operating income.",
-        "C. Because the covenant was technically satisfied in Year 3, no adjustment to Year 4 planning is required.",
-        "D. The auditor should communicate the covenant history to the SEC regardless of Year 4 results."
-      ],
-      correct: 1,
-      explain: "B. A near-miss on a covenant in Year 3 is a fraud triangle pressure condition. Management had strong incentive to ensure Year 4 results looked strong, warranting greater skepticism around operating income."
-    }
-  },
-  "Ch.10\nFraud": {
-    100: {
-      stem: "Fairfield's sales manager approves customer credit limits, records sales transactions, and processes customer write-offs with no compensating control. Under the fraud triangle, which condition does this most directly illustrate?",
-      choices: [
-        "A. Incentive",
-        "B. Opportunity",
-        "C. Rationalization",
-        "D. Collusion"
-      ],
-      correct: 1,
-      explain: "B. Opportunity. The lack of segregation of duties means one person can commit and conceal a fraud, which is the defining characteristic of the Opportunity condition."
-    },
-    200: {
-      stem: "Management's compensation includes a significant bonus tied to achieving a 15% profit margin. The company has never previously exceeded 8%. Year-end results show exactly 15.02%. Which fraud condition does this most directly represent?",
-      choices: [
-        "A. Opportunity arising from weak controls over the revenue cycle.",
-        "B. Rationalization that minor adjustments are acceptable.",
-        "C. Incentive or pressure to manipulate reported results.",
-        "D. A detection risk that has not yet been addressed by audit procedures."
-      ],
-      correct: 2,
-      explain: "C. Incentive/Pressure. A compensation structure tied directly to hitting a target — especially one never previously achieved — is a classic fraud triangle pressure condition."
-    },
-    300: {
-      stem: "Fairfield's internal audit confirms all year-end sales transactions appear properly authorized. However, the external auditor discovers that the sales manager and credit manager coordinated to approve fictitious high-risk customers. Which inherent limitation of internal control does this illustrate?",
-      choices: [
-        "A. Human error due to inadequate training.",
-        "B. Management override of established controls.",
-        "C. Collusion between two or more employees.",
-        "D. A deficiency in the overall control environment."
-      ],
-      correct: 2,
-      explain: "C. Collusion. When two or more individuals work together, they can circumvent controls specifically designed to catch individual actors, making it an inherent limitation of any control system."
-    },
-    400: {
-      stem: "Vertical analysis shows Fairfield's gross profit percentage increased from 17.9% to 27.85% in one year. Cost of sales grew only 6.3% while net sales grew 21%. What does this pattern most suggest to a skeptical auditor?",
-      choices: [
-        "A. Operations improved significantly and management's explanation should be accepted.",
-        "B. Revenue may be overstated, cost of sales may be understated, or both — expanded testing is warranted.",
-        "C. The NovaStar acquisition fully explains the margin improvement and no further action is needed.",
-        "D. Higher margins indicate lower audit risk and justify a reduction in substantive testing."
-      ],
-      correct: 1,
-      explain: "B. When margins spike in a way inconsistent with industry peers and prior-year trends, the auditor must investigate whether revenue was inflated or costs were deferred or improperly capitalized."
-    }
-  },
-  "Ch.12\nIC & Control": {
-    100: {
-      stem: "A single accounts payable employee both approves vendor invoices and processes the related payments with no compensating control. The auditor concludes there is more than a reasonable possibility that a material misstatement would not be prevented or detected on a timely basis. This deficiency is best classified as a:",
-      choices: [
-        "A. Control deficiency.",
-        "B. Significant deficiency.",
-        "C. Material weakness.",
-        "D. Inherent limitation of internal control."
-      ],
-      correct: 2,
-      explain: "C. Material weakness. The threshold is met when there is more than a reasonable possibility that a material misstatement will not be prevented or detected on a timely basis."
-    },
-    200: {
-      stem: "Under PCAOB AS 2201, when auditing internal control over financial reporting, the auditor uses a top-down approach. Which of the following represents the correct starting point?",
-      choices: [
-        "A. Testing individual transaction-level controls for the highest-dollar accounts.",
-        "B. Evaluating entity-level controls, including tone at the top and board oversight.",
-        "C. Identifying significant accounts and disclosures most susceptible to misstatement.",
-        "D. Assessing IT general controls supporting the financial reporting system."
-      ],
-      correct: 1,
-      explain: "B. The top-down approach begins at the top — entity-level controls, tone at the top, and the overall control environment — before drilling into specific accounts or processes."
-    },
-    300: {
-      stem: "Management reclassified $1,000,000 of internal software development labor from SG&A expense to PP&E. No documentation of the technological feasibility milestone was provided to the audit team. Which assertion for PP&E is most directly at risk?",
-      choices: [
-        "A. Existence — the capitalized assets may not physically exist.",
-        "B. Completeness — not all PP&E additions have been recorded.",
-        "C. Valuation — the capitalized amount may not qualify under GAAP, overstating assets.",
-        "D. Rights and obligations — Fairfield may not have legal title to the software."
-      ],
-      correct: 2,
-      explain: "C. Valuation. Without documentation of the feasibility milestone, the capitalization may not meet GAAP criteria, meaning PP&E is overstated and SG&A expense is understated."
-    },
-    400: {
-      stem: "Fairfield Computers is a privately held nonissuer. The auditor identifies a material weakness in internal control over financial reporting during the audit. What is the auditor's required action?",
-      choices: [
-        "A. Issue an adverse opinion on the financial statements.",
-        "B. Communicate the material weakness in writing to management and those charged with governance.",
-        "C. Include a separate opinion paragraph on internal control effectiveness in the audit report.",
-        "D. Withdraw from the engagement since the financial statements cannot be relied upon."
-      ],
-      correct: 1,
-      explain: "B. For nonissuers, there is no requirement to issue a separate ICFR opinion. However, auditors must communicate material weaknesses in writing to management and those charged with governance."
-    }
-  },
-  "Ch.13\nAudit Strategy": {
-    100: {
-      stem: "While performing a test of controls, an auditor discovers that a $45,000 cash disbursement was processed without the required dual-approval signature. What does this exception most directly represent?",
-      choices: [
-        "A. A financial statement misstatement that requires a proposed correcting journal entry.",
-        "B. A control deviation that indicates the likelihood of a dollar misstatement but is not itself one.",
-        "C. An immaterial error that does not require follow-up since $45,000 is below performance materiality.",
-        "D. Grounds to immediately issue a material weakness opinion on internal control."
-      ],
-      correct: 1,
-      explain: "B. A TOC exception is a control deviation — it means the control did not operate as designed. It increases the likelihood that a dollar misstatement exists, but the auditor must perform substantive testing to determine whether one actually occurred."
-    },
-    200: {
-      stem: "Substantive analytical procedures are the least expensive of the five audit test types. Under which circumstance are they most effective?",
-      choices: [
-        "A. Comparing total annual revenue for Year 4 against total annual revenue for Year 3.",
-        "B. Comparing monthly revenue by product line and region against budget and prior-year actuals.",
-        "C. Reviewing the prior-year audit workpapers to identify previously identified revenue exceptions.",
-        "D. Inquiring of management about the causes of fluctuations identified during planning."
-      ],
-      correct: 1,
-      explain: "B. Substantive analytical procedures are most effective at a granular level — monthly, by product line, by region. Annual company-wide comparisons are too broad to isolate specific misstatements."
-    },
-    300: {
-      stem: "Fairfield has weak internal controls over the revenue cycle and high inherent risk for occurrence and cutoff assertions. Tests of controls confirm that controls are not operating effectively. Which evidence mix is most appropriate?",
-      choices: [
-        "A. Extensive tests of controls; limited tests of details since understanding the weakness is sufficient.",
-        "B. No tests of controls; extensive substantive tests of transactions and tests of details of balances.",
-        "C. Balanced equal reliance on all five test types.",
-        "D. Primarily substantive analytical procedures since they are the least expensive option."
-      ],
-      correct: 1,
-      explain: "B. Per Table 13-3: weak internal controls combined with high inherent risk leads to no TOC reliance and extensive substantive tests of transactions and tests of details of balances."
-    },
-    400: {
-      stem: "Fairfield's Year 4 audit reveals: a profit margin more than double the industry average, DSO increasing while bad debt expense declined, unsupported Q4 expense reversals, $1M capitalized without feasibility documentation, and material cutoff exceptions in the sales working paper. Viewed together, what does this pattern most suggest?",
-      choices: [
-        "A. A series of isolated errors that should each be corrected individually before issuing an unmodified opinion.",
-        "B. A pervasive pattern consistent with fraudulent financial reporting that requires expanding testing and reassessing fraud risk at the financial statement level.",
-        "C. Primarily a classification issue related to the NovaStar acquisition that can be resolved by focusing on goodwill.",
-        "D. A going concern situation that requires the addition of an emphasis-of-matter paragraph to the report."
-      ],
-      correct: 1,
-      explain: "B. Multiple simultaneous indicators — margin anomaly, contradictory ratio movements, unsupported reversals, and cutoff exceptions — form a pervasive pattern that triggers AU-C §240 fraud risk reassessment at the overall financial statement level."
-    }
-  }
-};
 
+  "Ch.7\nEvidence": {
+    100: { stem: "An auditor traces shipping documents to recorded sales invoices. This direction of testing most directly addresses which assertion?", choices: ["A. Completeness","B. Existence","C. Valuation","D. Classification"], correct: 0, explain: "A. Completeness. Starting from the source document (shipping) and tracing forward tests whether all shipments were recorded — that is Completeness." },
+    200: { stem: "Fairfield's auditor obtains a large volume of internal sales reports but minimal external confirmations. Which characteristic of audit evidence is most directly impaired?", choices: ["A. Sufficiency","B. Reliability","C. Relevance","D. Timeliness"], correct: 1, explain: "B. Reliability. Internal documents are created and controlled by the client, reducing their reliability compared to independently obtained evidence." },
+    300: { stem: "ADA flags 47 invoices dated December 31 with shipping dates in January. Management says it is normal year-end volume. What is the auditor's most appropriate next step?", choices: ["A. Accept management's explanation since inquiry is a valid form of evidence.","B. Issue a scope limitation since the pattern cannot be explained.","C. Develop an independent expectation and inspect a sample of shipping documents and contracts.","D. Expand the ADA scan to the full year and conclude based on those results."], correct: 2, explain: "C. The ADA step of Investigating Anomalies requires developing an expectation first, then corroborating or refuting it with additional evidence such as shipping documents and contracts." },
+    400: { stem: "An audit associate documents: 'Reviewed year-end revenue for cutoff issues.' Which documentation requirement is most clearly violated?", choices: ["A. The working paper must be cross-referenced to the permanent file.","B. Working papers must be prepared by a senior auditor or above.","C. The documentation is sufficient because it identifies the account and period.","D. The documentation must describe the procedures performed, evidence examined, and conclusions reached."], correct: 3, explain: "D. AU-C 230 requires sufficient detail for another experienced auditor to understand what was done, what evidence was obtained, and what conclusions were reached." }
+  },
+
+  "Ch.8\nPlanning": {
+    100: { stem: "Before accepting a new engagement, the successor auditor requests permission to contact the predecessor auditor. Management refuses. What is the most appropriate response?", choices: ["A. Proceed with the engagement and perform additional procedures to compensate.","B. Limit the engagement to a review instead of an audit.","C. Seriously consider whether to accept the engagement.","D. Accept the engagement but disclose the limitation in the audit report."], correct: 2, explain: "C. Management's refusal is a red flag about integrity. The successor auditor should seriously consider whether to accept the engagement at all." },
+    200: { stem: "Performance materiality is set at a level lower than overall materiality. What is the primary purpose of this lower threshold?", choices: ["A. To allow auditors to waive corrections for amounts below overall materiality.","B. To ensure that every account balance receives the same level of testing.","C. To satisfy audit committee disclosure requirements under PCAOB standards.","D. To reduce the likelihood that the combined total of uncorrected misstatements exceeds overall materiality."], correct: 3, explain: "D. Performance materiality creates a buffer so that even if multiple individually immaterial misstatements go uncorrected, their combined total is unlikely to exceed overall materiality." },
+    300: { stem: "Fairfield's days to collect receivables increased from 45 to 48 days while bad debt expense declined in the same year. Considered together, the auditor is most concerned about which of the following?", choices: ["A. The allowance for doubtful accounts may be understated.","B. Revenue may not have been completely recorded.","C. Inventory turnover has declined, suggesting obsolete stock.","D. Operating leverage is artificially inflating net income."], correct: 0, explain: "A. Longer collection periods combined with lower bad debt expense is contradictory — it suggests the allowance is too low, understating expenses and overstating net assets." },
+    400: { stem: "An auditor identifies misstatements of $80K in AR, $350K in inventory, and $120K in accrued liabilities. Overall materiality is $500K. Each was individually judged immaterial. Which concept requires the auditor to reconsider that conclusion?", choices: ["A. Tolerable misstatement set at the individual account level.","B. The aggregation of individually immaterial misstatements.","C. The inherent risk associated with the accounts receivable balance.","D. Performance materiality applies only to tests of controls."], correct: 1, explain: "B. $80K + $350K + $120K = $550K, which exceeds overall materiality of $500K. Individually immaterial items must be evaluated in aggregate." }
+  },
+
+  "Ch.9\nRisk Model": {
+    100: { stem: "The audit risk model is AR = IR x CR x DR. Both IR and CR are high and acceptable audit risk is low. What is the appropriate level of planned detection risk?", choices: ["A. Low — the auditor must gather more persuasive evidence to compensate.","B. High — inherent and control risk already account for most engagement risk.","C. Moderate — acceptable audit risk is always the dominant factor.","D. Irrelevant — detection risk does not apply when CR is at maximum."], correct: 0, explain: "A. PDR = AAR / (IR x CR). Low AAR divided by high IR x CR = very low PDR, requiring more extensive and persuasive audit evidence." },
+    200: { stem: "Fairfield's auditor confirms payroll controls are well-designed and operating effectively. What is the most appropriate adjustment to the audit plan?", choices: ["A. Increase tests of details of balances to verify the TOC results.","B. Accept a higher planned detection risk and reduce substantive payroll testing.","C. Eliminate all substantive testing for payroll since controls are confirmed.","D. Increase acceptable audit risk since strong controls reduce engagement risk."], correct: 1, explain: "B. When control risk is low, the auditor can accept a higher planned detection risk, which translates to less extensive substantive testing for that cycle." },
+    300: { stem: "Fairfield Computers is a large publicly traded company with extensive external investor reliance. Compared to a small private client, how should the auditor set acceptable audit risk?", choices: ["A. Higher — larger companies have greater resources to maintain accurate records.","B. Higher — public companies face more regulatory oversight.","C. Lower — the consequences of issuing an incorrect opinion are significantly greater.","D. The same — auditing standards require consistency across all engagements."], correct: 2, explain: "C. More users rely on the statements, so the auditor must accept less risk of being wrong — meaning a lower AAR and more extensive audit procedures." },
+    400: { stem: "In Year 3, Fairfield's Times Interest Earned was exactly 1.0, barely satisfying a loan covenant. In Year 4 it jumped to 9.23. How does this most directly affect Year 4 planning?", choices: ["A. The Year 4 improvement eliminates the risk; reduce testing.","B. Because the covenant was technically met in Year 3, no adjustment is needed.","C. Communicate the covenant history to the SEC regardless of Year 4 results.","D. The Year 3 near-breach is an incentive condition warranting increased skepticism over Year 4 operating income."], correct: 3, explain: "D. A near-miss on a covenant in Year 3 is a fraud triangle pressure condition. Management had strong incentive to ensure Year 4 results looked strong." }
+  },
+
+  "Ch.10\nFraud": {
+    100: { stem: "Fairfield's sales manager approves credit limits, records sales, and processes write-offs with no compensating control. Under the fraud triangle, which condition does this most directly illustrate?", choices: ["A. Incentive","B. Rationalization","C. Opportunity","D. Collusion"], correct: 2, explain: "C. Opportunity. The lack of segregation of duties means one person can commit and conceal fraud — the defining characteristic of the Opportunity condition." },
+    200: { stem: "Management's bonus is tied to achieving a 15% profit margin. The company has never exceeded 8%. Year-end results show exactly 15.02%. Which fraud condition does this most directly represent?", choices: ["A. Opportunity arising from weak controls.","B. Rationalization that minor adjustments are acceptable.","C. A detection risk not yet addressed by audit procedures.","D. Incentive or pressure to manipulate reported results."], correct: 3, explain: "D. Incentive/Pressure. A compensation structure tied directly to a target never previously achieved is a classic fraud triangle pressure condition." },
+    300: { stem: "Internal audit confirms all year-end sales are properly authorized. But the external auditor learns the sales manager and credit manager coordinated to approve fictitious customers. Which control limitation does this illustrate?", choices: ["A. Collusion between two or more employees.","B. Human error due to inadequate training.","C. Management override of established controls.","D. A deficiency in the overall control environment."], correct: 0, explain: "A. Collusion. Two or more people working together can circumvent controls designed to catch individual actors — an inherent limitation of any control system." },
+    400: { stem: "Vertical analysis shows Fairfield's gross profit % increased from 17.9% to 27.85%. Cost of sales grew only 6.3% while net sales grew 21%. What does this pattern most suggest to a skeptical auditor?", choices: ["A. Operations improved; management's explanation should be accepted.","B. Revenue may be overstated, cost of sales understated, or both — expanded testing is warranted.","C. The NovaStar acquisition fully explains the margin jump — no action needed.","D. Higher margins indicate lower audit risk and justify reduced testing."], correct: 1, explain: "B. When margins spike inconsistently with peers and prior trends, the auditor must investigate whether revenue was inflated or costs were improperly capitalized." }
+  },
+
+  "Ch.12\nIC & Control": {
+    100: { stem: "A single AP employee both approves vendor invoices and processes payments with no compensating control. There is more than a reasonable possibility a material misstatement would not be detected. This is best classified as a:", choices: ["A. Material weakness.","B. Significant deficiency.","C. Control deficiency.","D. Inherent limitation of internal control."], correct: 0, explain: "A. Material weakness. The threshold is met when there is more than a reasonable possibility that a material misstatement will not be prevented or detected on a timely basis." },
+    200: { stem: "Under PCAOB AS 2201, when auditing ICFR using a top-down approach, what is the correct starting point?", choices: ["A. Testing individual transaction-level controls for high-dollar accounts.","B. Evaluating entity-level controls, including tone at the top and board oversight.","C. Identifying significant accounts most susceptible to misstatement.","D. Assessing IT general controls for the financial reporting system."], correct: 1, explain: "B. The top-down approach begins at the top — entity-level controls, tone at the top, and the overall control environment — before drilling into specific accounts." },
+    300: { stem: "Management reclassified $1,000,000 of software development labor from SG&A to PP&E with no feasibility documentation. Which assertion for PP&E is most directly at risk?", choices: ["A. Existence — the assets may not physically exist.","B. Completeness — not all PP&E has been recorded.","C. Valuation — the amount may not qualify under GAAP, overstating assets.","D. Rights and obligations — Fairfield may not have legal title."], correct: 2, explain: "C. Valuation. Without feasibility documentation, the capitalization may not meet GAAP criteria — PP&E is overstated and SG&A is understated." },
+    400: { stem: "Fairfield is a privately held nonissuer. The auditor identifies a material weakness in ICFR. What is the auditor's required action?", choices: ["A. Issue an adverse opinion on the financial statements.","B. Include a separate ICFR opinion paragraph in the audit report.","C. Withdraw from the engagement.","D. Communicate the material weakness in writing to management and those charged with governance."], correct: 3, explain: "D. For nonissuers there is no separate ICFR opinion requirement. The auditor must communicate material weaknesses in writing to management and those charged with governance." }
+  },
+
+  "Ch.13\nAudit Strategy": {
+    100: { stem: "An auditor discovers a $45,000 cash disbursement processed without the required dual-approval signature. What does this exception most directly represent?", choices: ["A. A financial statement misstatement requiring a correcting journal entry.","B. An immaterial error that does not require follow-up.","C. A control deviation indicating likelihood of a dollar misstatement but not itself one.","D. Grounds to immediately issue a material weakness opinion."], correct: 2, explain: "C. A TOC exception is a control deviation — it means the control did not operate as designed. The auditor must perform substantive testing to determine if a dollar misstatement occurred." },
+    200: { stem: "Substantive analytical procedures are the least expensive test type. Under which circumstance are they most effective?", choices: ["A. Comparing total annual revenue Year 4 vs. Year 3.","B. Reviewing prior-year workpapers for revenue exceptions.","C. Inquiring of management about fluctuations found during planning.","D. Comparing monthly revenue by product line and region against budget and prior-year actuals."], correct: 3, explain: "D. SAPs are most effective at a granular level — monthly, by product line, by region. Annual company-wide comparisons are too broad to isolate specific misstatements." },
+    300: { stem: "Fairfield has weak internal controls over revenue and high inherent risk. TOC confirms controls are not effective. Which evidence mix is most appropriate?", choices: ["A. No TOC; extensive substantive tests of transactions and tests of details of balances.","B. Extensive TOC; limited TDB since understanding the weakness is sufficient.","C. Balanced equal reliance on all five test types.","D. Primarily substantive analytical procedures — least expensive option."], correct: 0, explain: "A. Per Table 13-3: weak IC + high inherent risk leads to no TOC reliance and extensive STOT and TDB." },
+    400: { stem: "Year 4 shows: profit margin 2x industry average, days to collect up while bad debt declined, unsupported Q4 reversals, $1M capitalized without documentation, and material cutoff exceptions. Viewed together, this most suggests:", choices: ["A. Isolated errors — correct each and issue unmodified opinion.","B. A pervasive pattern consistent with fraudulent financial reporting — expand testing and reassess fraud risk.","C. Primarily a NovaStar acquisition classification issue — focus on goodwill.","D. A going concern situation requiring an emphasis-of-matter paragraph."], correct: 1, explain: "B. Multiple simultaneous indicators form a pervasive pattern triggering AU-C 240 fraud risk reassessment at the overall financial statement level." }
+  }
+}
 const POINT_VALUES = [100, 200, 300, 400];
 const DAILY_DOUBLES = [[2, 2], [4, 3]];
 
